@@ -20,7 +20,7 @@ export default class ActivedChatbotsData extends Component {
         environment={environment}
         query={query}
         variables={{
-          activeChatbotsCount: 10
+          activeChatbotsCount: 21
         }}
         render={({ props }) => {
           if (props) return <ActivedChatbotsList list={props.viewer} />;

@@ -58,3 +58,4 @@ buck-out/
 # relay
 scripts/*.graphql
 scripts/*.json
+__generated__/

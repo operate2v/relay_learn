@@ -3,6 +3,7 @@ import { Text, View, FlatList } from "react-native";
 import styled from "styled-components/native";
 import StoreData from '../../components/store_data';
 import ActivedChatbotsData from '../../components/actived_chatbots_data/';
+import UserData from '../../components/user_data';
 
 const sample = [
   { id: "1", name: "krak iron" },
@@ -27,6 +28,7 @@ export default class Home extends Component {
         <Text>Home</Text>
         <StoreData />
         <ActivedChatbotsData data={sample}/>
+        <UserData />
         
       </HomeContainer>
     );

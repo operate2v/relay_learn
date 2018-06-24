@@ -9,16 +9,38 @@ const ListContainer = styled.View`
   width: 80%;
   height: 200px;
 `;
+const Footer = styled.TouchableOpacity`
+  width: 100%;
+  height: 25px;
+  justify-content: center;
+  align-items: center;
+  background-color: #faceae;
+`;
 
 class ActivedChatbotsList extends Component {
   state = {};
+
+  footer = () => {
+    return (
+      <Footer>
+        <Text>sibal</Text>
+      </Footer>
+    );
+  };
+
+  header = () => {
+    return (
+    <Text>활성챗봇 리스트</Text>
+    )
+  }
+
   render() {
     const { activatedChatbots } = this.props.list;
-    console.log(this.props.list)
     return (
       <ListContainer>
         <FlatList
-          ListHeaderComponent={<Text>활성챗봇 리스트</Text>}
+          ListFooterComponent={this.footer()}
+          ListHeaderComponent={this.header()}
           data={activatedChatbots.edges}
           keyExtractor={({ node }) => node.chatbot.id}
           renderItem={({ item }) => (

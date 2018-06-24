@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { createFragmentContainer } from "react-relay";
 import { SafeAreaView, Text, Button } from "react-native";
 import styled from "styled-components/native";
+import { ActiveChatbotMutation, DeactiveChatbotMutation } from '../../mutations';
 
 const DetailContainer = styled.SafeAreaView`
   flex: 1;
@@ -12,6 +13,25 @@ const DetailContainer = styled.SafeAreaView`
 
 class DetailInfo extends Component {
   state = {};
+
+  activeChatbot = () => {
+    ActiveChatbotMutation.commit(
+      this.props.relay.environment,
+      this.props.detail.node.id,
+      () => {},
+    );
+  }
+
+  deactiveChatbot = () => {
+    DeactiveChatbotMutation.commit(
+      this.props.relay.environment,
+      this.props.detail.node.id,
+      () => {},
+    );
+  }
+
+
+
   render() {
     const { node } = this.props.detail;
 
@@ -19,7 +39,9 @@ class DetailInfo extends Component {
       <DetailContainer>
         <Text>{node.chatbot.name}</Text>
         <Text>active: {node.active ? "true" : "false"}</Text>
-        <Button title="sibal" onPress={() => console.log("sial")} />
+        <Text>{node.chatbot.description}</Text>
+        <Button title="active" onPress={() => this.activeChatbot()} />
+        <Button title="deactive" onPress={() => this.deactiveChatbot()} />
       </DetailContainer>
     );
   }
@@ -33,10 +55,10 @@ export default createFragmentContainer(
         ... on StoreChatbot @connection(key: "keyDetail_detailStore") {
           id
           active
-          averageRating
           chatbot {
             id
             name
+            description
           }
         }
       }

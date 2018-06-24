@@ -15,7 +15,6 @@ class StoreItem extends Component {
   state = {};
   render() {
     const { data } = this.props;
-    console.log(data.node.active)
     return (
       <ItemContainer
         onPress={() =>
