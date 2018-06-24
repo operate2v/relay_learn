@@ -19,7 +19,7 @@ export default class StoreData extends Component {
         environment={environment}
         query={query}
         variables={{
-          storeCount: 3,
+          storeCount: 9,
           storeCursor: ""
         }}
         render={({ props }) => {

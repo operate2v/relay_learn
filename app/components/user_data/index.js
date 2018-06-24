@@ -11,13 +11,23 @@ const query = graphql`
       username
       email
       gender
+      createdAt
+      DeveloperInfomation {
+        id
+        website
+        name
+        termsOfService
+      }
+      autocompleteRecommendedChatbots {
+        id
+        name
+      }
     }
-    
   }
 `;
 
 export default class UserData extends Component {
-  state = {  }
+  state = {};
   render() {
     return (
       <QueryRenderer

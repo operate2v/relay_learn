@@ -2,16 +2,6 @@ import { ConnectionHandler } from "relay-runtime";
 import { commitMutation, graphql } from "react-relay";
 import uuidv4 from 'uuid/v4';
 
-// const sharedUpdater = (store, viewerId, deleteNodeId) => {
-//   const userProxy = store.get(viewerId);
-//   const conn = ConnectionHandler.getConnection(
-//     userProxy,
-//     "keyActivatedChatbotsItem_activatedChatbots",
-//     { name: "" }
-//   );
-//   ConnectionHandler.deleteNode(conn, deleteNodeId);
-// };
-
 const commit = (environment, id, commitHandler) => {
   const mutation = graphql`
     mutation deactiveChatbotMutation($input: DeactiveChatbotInput!) {
@@ -19,6 +9,7 @@ const commit = (environment, id, commitHandler) => {
         deactivateChatbotId
         storeChatbotEdge {
           node {
+            id
             active
             chatbot {
               id
@@ -58,15 +49,15 @@ const commit = (environment, id, commitHandler) => {
   };
 
   const updater = store => {
-    // const viewerId = store
-    //   .getRoot()
-    //   .getLinkedRecord("viewer")
-    //   .getDataID();
-    // const deleteId = store
-    //   .getRootField("deactiveChatbot")
-    //   .getValue("deactivateChatbotId");
-
-    // sharedUpdater(store, viewerId, deleteId);
+    const viewerId = store.getRoot().getLinkedRecord('viewer').getDataID();
+    const deleteId = store
+      .getRootField('deactiveChatbot')
+      .getValue('deactivateChatbotId');
+    const conn = ConnectionHandler.getConnection(
+      store.get(viewerId),
+      'list_activatedChatbots',
+    );
+    ConnectionHandler.deleteNode(conn, deleteId);
   };
 
   commitMutation(environment, {

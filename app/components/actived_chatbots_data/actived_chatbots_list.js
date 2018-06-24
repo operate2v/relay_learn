@@ -57,9 +57,10 @@ export default createFragmentContainer(
   graphql`
     fragment activedChatbotsList_list on User {
       activatedChatbots(first: $activeChatbotsCount)
-        @connection(key: "keyList_activatedChatbots") {
+        @connection(key: "list_activatedChatbots") {
         edges {
           node {
+            id
             chatbot {
               id
               name

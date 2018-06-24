@@ -2,23 +2,6 @@ import { ConnectionHandler } from "relay-runtime";
 import { commitMutation, graphql } from "react-relay";
 import uuidv4 from "uuid/v4";
 
-// const sharedUpdater = (store, viewerId, activatedChatbotEdge, deleteNodeId) => {
-//   const userProxy = store.get(viewerId);
-//   const conn = ConnectionHandler.getConnection(
-//     userProxy,
-//     'keyActivatedChatbotsItem_activatedChatbots',
-//     { name: '' },
-//   );
-//   ConnectionHandler.insertEdgeAfter(conn, activatedChatbotEdge);
-
-//   const userProxy2 = store.get(viewerId);
-//   const conn2 = ConnectionHandler.getConnection(
-//     userProxy2,
-//     'keyAutocompleteDeactivatedChatbotsItem_autocompleteDeactivatedChatbots',
-//   );
-//   ConnectionHandler.deleteNode(conn2, deleteNodeId);
-// };
-
 const commit = (environment, id, commitHandler) => {
   const mutation = graphql`
     mutation activeChatbotMutation($input: ActiveChatbotInput!) {
@@ -30,6 +13,15 @@ const commit = (environment, id, commitHandler) => {
               id
               name
               description
+            }
+          }
+        }
+        activatedChatbotEdge {
+          node {
+            id
+            chatbot {
+              id
+              name
             }
           }
         }
@@ -56,7 +48,7 @@ const commit = (environment, id, commitHandler) => {
           chatbot: {
             id: uuidv4(),
             name: "loading...",
-            description: 'loading...'
+            description: "loading..."
           }
         }
       }
@@ -64,23 +56,23 @@ const commit = (environment, id, commitHandler) => {
   };
 
   const updater = store => {
-    // const activatedChatbotEdge = store
-    //   .getRootField('activeChatbot')
-    //   .getLinkedRecord('activatedChatbotEdge');
-    // if (activatedChatbotEdge === null) return;
+    const root = store.getRoot()                                              // 현재 최상위 쿼리 ( viewer, node, admin ...)
+    const viewer = root.getLinkedRecord('viewer');                            // viewer 쿼리
+    const viewerId = viewer.getDataID();                                      // id 가져옴
+    const recommendedChatbots = viewer.getLinkedRecords('autocompleteRecommendedChatbots');   // autocompleteRecommendedChatbots 쿼리
+    const recommendedChatbotName = recommendedChatbots[0].getValue('name');            // autocompleteRecommendedChatbots 쿼리 안의 첫번째 배열 name
 
-    // const viewerId = store
-    //   .getRoot()
-    //   .getLinkedRecord('viewer')
-    //   .getDataID();
-    // const deleteNodeId = store
-    //   .getRootField('activeChatbot')
-    //   .getLinkedRecord('activatedChatbotEdge')
-    //   .getLinkedRecord('node')
-    //   .getLinkedRecord('chatbot')
-    //   .getValue('id');
+    const resultRoot = store.getRootField('activeChatbot');                   // 반환된 결과 쿼리의 root 필드 탐색
+    const resultActivateEdge = resultRoot.getLinkedRecord('activatedChatbotEdge');
+    const resultActivateNode = resultActivateEdge.getLinkedRecord('node');
+    const resultActivateChatbot = resultActivateNode.getLinkedRecord('chatbot');
+    const resultActivatedName = resultActivateChatbot.getValue('name');
 
-    // sharedUpdater(store, viewerId, activatedChatbotEdge, deleteNodeId);
+    const conn = ConnectionHandler.getConnection(
+      store.get(viewerId),
+      'list_activatedChatbots',
+    );
+    ConnectionHandler.insertEdgeAfter(conn, resultActivateEdge);
   };
 
   commitMutation(environment, {
@@ -88,7 +80,7 @@ const commit = (environment, id, commitHandler) => {
     variables,
     onCompleted,
     optimisticResponse,
-    // updater,
+    updater,
     onError: err => console.error(err)
   });
 };
