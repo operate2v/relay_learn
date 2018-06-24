@@ -4,19 +4,28 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "get-schema": "node scripts/get_schema.js",
+    "relay": "relay-compiler --src ./app --schema ./scripts/schema.graphql --extensions js jsx",
+    "ready": "yarn && yarn get-schema && yarn relay",
+    "clean": "watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf node_modules/ && yarn cache clean && yarn ready && yarn start -- --reset-cache"
   },
   "dependencies": {
     "react": "16.3.1",
     "react-native": "0.55.4",
     "react-navigation": "^2.5.1",
+    "react-relay": "^1.6.0",
+    "relay-runtime": "^1.6.0",
     "styled-components": "^3.3.3"
   },
   "devDependencies": {
     "babel-jest": "23.0.1",
+    "babel-plugin-relay": "^1.6.0",
     "babel-preset-react-native": "4.0.0",
+    "graphql": "^0.13.2",
     "jest": "23.1.0",
-    "react-test-renderer": "16.3.1"
+    "react-test-renderer": "16.3.1",
+    "relay-compiler": "^1.6.0"
   },
   "jest": {
     "preset": "react-native"

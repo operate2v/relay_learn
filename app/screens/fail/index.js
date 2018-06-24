@@ -15,6 +15,7 @@ export default class Fail extends Component {
     return (
       <FailContainer>
         <Text>fail login</Text>
+        <Text>{this.props.navigation.state.params.error}</Text>
       </FailContainer>
     );
   }

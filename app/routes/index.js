@@ -4,12 +4,14 @@ import Home from '../screens/home';
 import First from '../screens/first';
 import Second from '../screens/second';
 import Fail from '../screens/fail';
+import StoreDetail from '../screens/store_detail';
 
 const MainStack = createStackNavigator(
   {
     Home,
     First,
     Second,
+    StoreDetail
   },
   {
     initialRouteName: 'Home',

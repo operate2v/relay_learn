@@ -3,6 +3,7 @@ const routes = {
   home: 'Main',
   first: 'First',
   second: 'Second',
+  storeDetail: 'StoreDetail',
   mainStack: 'MainStack',
   failStack: 'FailStack',
 };
