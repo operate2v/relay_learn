@@ -45,14 +45,13 @@ const commit = (
       console.log(getName);
 
       field.setValue('chicken', 'username')
-    
-
   }
+
   const optimisticResponse = {
     updateUser: {
       user: {
         id: id,
-        email: 'loading...',
+        // email: 'loading...',
         username: 'loading...',
         gender: 'loading...',
         birthday: 'loading...'

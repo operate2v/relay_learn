@@ -1,4 +1,5 @@
 import { Environment, Network, RecordSource, Store } from "relay-runtime";
+import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { AsyncStorage } from "react-native";
 import { GRAPHQL_SERVER_URI } from "../app/constants/uri";
 
@@ -26,7 +27,25 @@ function fetchQuery(operation, variables) {
     });
 }
 
+const websocketURL = 'wss://subscriptions.graph.cool/v1/__GRAPHCOOL_PROJECT_ID__'
+
+function setupSubscription(
+  config,
+  variables,
+  cacheConfig,
+  observer,
+) {
+  const query = config.text
+
+  const subscriptionClient = new SubscriptionClient(websocketURL, {reconnect: true})
+  const id = subscriptionClient.subscribe({query, variables}, (error, result) => {
+    observer.onNext({data: result})
+  })
+}
+
+
 const network = Network.create(fetchQuery);
+// const network = Network.create(fetchQuery, setupSubscription);
 const source = new RecordSource();
 const store = new Store(source);
 

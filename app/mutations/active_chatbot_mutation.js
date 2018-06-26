@@ -39,6 +39,16 @@ const commit = (environment, id, commitHandler) => {
     if (commitHandler) commitHandler();
   };
 
+  optimisticUpdater = (store) => {
+    const viewerId = store
+    .getRoot()
+    .getLinkedRecord('viewer').getDataID();
+
+    const aa = store.get(id);
+    console.log(aa.getValue('active'))
+    aa.setValue(true, 'active');  
+  }
+
   const optimisticResponse = {
     activeChatbot: {
       storeChatbotEdge: {
@@ -80,6 +90,7 @@ const commit = (environment, id, commitHandler) => {
     variables,
     onCompleted,
     optimisticResponse,
+    // optimisticUpdater,
     updater,
     onError: err => console.error(err)
   });

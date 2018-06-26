@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { Text, View, FlatList } from "react-native";
+import { Text, AsyncStorage } from "react-native";
 import styled from "styled-components/native";
-import StoreData from '../../components/store_data';
-import ActivedChatbotsData from '../../components/actived_chatbots_data/';
-import UserData from '../../components/user_data';
+import { ChatMessageCreatedSubscription } from "../../subscriptions";
+import StoreData from "../../components/store_data";
+import ActivedChatbotsData from "../../components/actived_chatbots_data/";
+import UserData from "../../components/user_data";
+import environment from "../../../scripts/get_environment";
 
 const sample = [
   { id: "1", name: "krak iron" },
@@ -22,14 +24,20 @@ const HomeContainer = styled.SafeAreaView`
 
 export default class Home extends Component {
   state = {};
+
+  componentDidMount = () => {
+    AsyncStorage.getItem("@AccessToken:key").then(accessToken =>
+      ChatMessageCreatedSubscription.commit(environment, accessToken)
+    );
+  };
+
   render() {
     return (
       <HomeContainer>
         <Text>Home</Text>
         <StoreData />
-        <ActivedChatbotsData data={sample}/>
+        <ActivedChatbotsData data={sample} />
         <UserData />
-        
       </HomeContainer>
     );
   }
